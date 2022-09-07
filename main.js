@@ -15,6 +15,7 @@ const client = new Client({
 // Login to Discord with your client's token
 client.login(token).then(() => {
     client.user.setPresence({ activities: [{ name: 'sing of crows', type: 'LISTENING' }], status: 'online' });
+    client.user.setStatus('dnd');
 });
 
 // When the client is ready, run this code (only once)
