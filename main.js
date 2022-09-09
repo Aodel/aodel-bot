@@ -44,6 +44,7 @@ client.on('messageCreate', (message) => {
 	// 	return;
 	// }
 	if(message.content.toLowerCase().includes('!saludos') || message.content.toLowerCase().includes('puerta negra')){
+		// const cheersMessage = `El lobo aulla🐺!🌀Saludos viajerx de las Sombras🌀 ${message.author}`; 
 		const cheersMessage = `El lobo aulla🐺!🌀Saludos viajerx de las Sombras🌀 ${message.author}`; 
         message.channel.send(cheersMessage);
     }
@@ -90,5 +91,28 @@ client.on('messageCreate', (message) => {
         message.react('✅');
         let randomNumber = getRandomNumber(0, 100);
         message.reply(`Your random number is ${randomNumber}.`)
+    }
+
+    //Ping Pong GAME
+
+    if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){
+
+		// Declare a var for score from user(uscore) & score from bot(botscore)
+        let uscore = getRandomNumber(0, 100);
+        let botscore = getRandomNumber(0, 100);
+
+        message.reply(` Ping score is ${uscore}🔥`);
+
+        const pongMessage = `Pong! ${message.author}`;
+        message.channel.send(pongMessage);
+        message.reply(`${client.user} Pong score is ${botscore}🔥`);
+
+
+        const players = [(`${message.author}`+uscore),(`${client.user}`+botscore)];
+
+        console.log(players);
+
+        return null;
+        // message.channel.send(authorScore);
     }
 });
