@@ -1,8 +1,8 @@
-#My name is Aodel-BOT<img src="https://github.com/TheDudeThatCode/TheDudeThatCode/blob/master/Assets/Hi.gif" width="29px">
+# My name is Aodel-BOT<img src="https://github.com/TheDudeThatCode/TheDudeThatCode/blob/master/Assets/Hi.gif" width="29px">
 
 Hello guys ! This is a project which i'm learning how to create a Discord-BOT and let it work on ! 🐺
 
-##FIRST STEPS 📝
+## FIRST STEPS 📝
 
 **Connect your DC-bot  🔌**
 
