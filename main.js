@@ -60,26 +60,7 @@ client.on('messageCreate', (message) => {
 		message.channel.send(socialsTwitter);
     }
 
-	// Func gets random number using Math.floor/random
-	function getRandomNumber(min, max){
-		return Math.floor(Math.random() * (max-min) + min);
-	} 
 
-
-
-
-    // //Func gets Winner (maxvalue)
-    // function getPongWinner() {
-    //     // nameArr = new String [player.size()];
-
-    //     nameArr= players.keySet().toArray(nameArr);
-
-    //     let winner = players[0];
-
-    //     maxValue = player.get(nameArr[0]);
-    // }
-
-    /////
 
 	if (message.content == '$listCommands') {
         const exampleEmbed = new MessageEmbed()
@@ -109,52 +90,4 @@ client.on('messageCreate', (message) => {
         message.reply(`Your random number is ${randomNumber}.`)
     }
 
-    //Ping Pong GAME
-
-    if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){
-        
-        let uscore = getRandomNumber(0, 100);
-        let botscore = getRandomNumber(0, 100);
-
-        function getPingWinner(){
-    
-            if( uscore < botscore ){
-    
-                message.reply( "So............." +
-                `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`);
-            }
-        
-            else if (uscore > botscore){
-                
-                message.reply("So............." +
-                `\n ${message.author}✅ you WIN  🌟  this time 🎉!`);
-            }
-        }
-
-        message.reply(`  ${message.author} your score is ${uscore}  🔥`);
-
-        const pongMessage = `Pong!`;
-        message.channel.send(pongMessage);
-        message.reply(`${client.user}'s score is ${botscore} 🔥`);
-
-        console.log(getPingWinner());
-
-        //get maxValue & Winner
-        // const botWin = uscore < botscore;
-        // const userWin = uscore > botscore;
-        // const score = {
-        //     botWin : message.reply( "So............." +
-        //     `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`), 
-
-        //     userWin : message.reply("So............." +
-        //     `\n ${message.author}✅ you WIN  🌟  this time 🎉!`)
-        // }
-
-        // const pingWinner = Math.max(score);
-        // get Winner if method
-
-        
-
-        // console.log(getMaxValue());
-    }
 });
