@@ -109,7 +109,7 @@ client.on('messageCreate', (message) => {
         message.reply(`Your random number is ${randomNumber}.`)
     }
 
-    //Ping Pong GAME
+    //Ping Pong GAME now Working
 
     if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){
         
