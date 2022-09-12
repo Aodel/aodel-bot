@@ -116,6 +116,16 @@ client.on('messageCreate', (message) => {
         let uscore = getRandomNumber(0, 100);
         let botscore = getRandomNumber(0, 100);
 
+
+        message.reply(`  ${message.author} your score is ${uscore}  🔥`);
+
+        const pongMessage = `Pong!`;
+        message.channel.send(pongMessage);
+        message.reply(`${client.user}'s score is ${botscore} 🔥`);
+
+        console.log(getPingWinner());
+
+        
         function getPingWinner(){
     
             if( uscore < botscore ){
@@ -130,14 +140,6 @@ client.on('messageCreate', (message) => {
                 `\n ${message.author}✅ you WIN  🌟  this time 🎉!`);
             }
         }
-
-        message.reply(`  ${message.author} your score is ${uscore}  🔥`);
-
-        const pongMessage = `Pong!`;
-        message.channel.send(pongMessage);
-        message.reply(`${client.user}'s score is ${botscore} 🔥`);
-
-        console.log(getPingWinner());
 
         //get maxValue & Winner
         // const botWin = uscore < botscore;
