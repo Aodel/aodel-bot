@@ -1,3 +1,5 @@
+import { getRandomNumber } from './functions.js';
+import { getPingWinner } from './functions.js';
 
 // Require the necessary discord.js classes
 const { Client, GatewayIntentBits, MessageEmbed } = require('discord.js');
@@ -60,15 +62,7 @@ client.on('messageCreate', (message) => {
 		message.channel.send(socialsTwitter);
     }
 
-	// Func gets random number using Math.floor/random
-	function getRandomNumber(min, max){
-		return Math.floor(Math.random() * (max-min) + min);
-	} 
-
-
-
-
-    // //Func gets Winner (maxvalue)
+	    // //Func gets Winner (maxvalue)
     // function getPongWinner() {
     //     // nameArr = new String [player.size()];
 
@@ -78,7 +72,19 @@ client.on('messageCreate', (message) => {
 
     //     maxValue = player.get(nameArr[0]);
     // }
+        //get maxValue & Winner
+        // const botWin = uscore < botscore;
+        // const userWin = uscore > botscore;
+        // const score = {
+        //     botWin : message.reply( "So............." +
+        //     `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`), 
 
+        //     userWin : message.reply("So............." +
+        //     `\n ${message.author}✅ you WIN  🌟  this time 🎉!`)
+        // }
+
+        // const pingWinner = Math.max(score);
+        // get Winner if method
     /////
 
 	if (message.content == '$listCommands') {
@@ -109,54 +115,19 @@ client.on('messageCreate', (message) => {
         message.reply(`Your random number is ${randomNumber}.`)
     }
 
-    //Ping Pong GAME now Working
-
-    if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){
+   
+ if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){
         
-        let uscore = getRandomNumber(0, 100);
-        let botscore = getRandomNumber(0, 100);
+    const uscore = getRandomNumber(0, 100);
+    const botscore = getRandomNumber(0, 100);
 
 
-        message.reply(`  ${message.author} your score is ${uscore}  🔥`);
+    message.reply(`  ${message.author} your score is ${uscore}  🔥`);
 
-        const pongMessage = `Pong!`;
-        message.channel.send(pongMessage);
-        message.reply(`${client.user}'s score is ${botscore} 🔥`);
+    const pongMessage = `Pong!`;
+    message.channel.send(pongMessage);
+    message.reply(`${client.user}'s score is ${botscore} 🔥`);
 
-        console.log(getPingWinner());
-
-        
-        function getPingWinner(){
-    
-            if( uscore < botscore ){
-    
-                message.reply( "So............." +
-                `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`);
-            }
-        
-            else if (uscore > botscore){
-                
-                message.reply("So............." +
-                `\n ${message.author}✅ you WIN  🌟  this time 🎉!`);
-            }
-        }
-
-        //get maxValue & Winner
-        // const botWin = uscore < botscore;
-        // const userWin = uscore > botscore;
-        // const score = {
-        //     botWin : message.reply( "So............." +
-        //     `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`), 
-
-        //     userWin : message.reply("So............." +
-        //     `\n ${message.author}✅ you WIN  🌟  this time 🎉!`)
-        // }
-
-        // const pingWinner = Math.max(score);
-        // get Winner if method
-
-        
-
-        // console.log(getMaxValue());
-    }
+    console.log(getPingWinner());
+   }        
 });
