@@ -1,0 +1,1 @@
+const {Player, QueryType} = require("discord-player");

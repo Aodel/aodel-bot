@@ -1,17 +1,22 @@
 
 // Require the necessary discord.js classes
-const { Client, GatewayIntentBits, MessageEmbed } = require('discord.js');
+const { Client, GatewayIntentBits, MessageEmbed, DiscordAPIError } = require('discord.js');
+const {Player, QueryType} = require("discord-player");
 const { token } = require('./config.json');
 
 // Create a new client-BOT instance
-const client = new Client({ 
+const client = new Client({
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'GUILD_MEMBER', 'USER'],
 	intents: [
 	GatewayIntentBits.Guilds, 
 	GatewayIntentBits.GuildMessages, 
 	GatewayIntentBits.GuildMembers, 
 	GatewayIntentBits.MessageContent,
-] });
+    GatewayIntentBits.GuildVoiceStates
+    ],
+ });
 
+ client.commands = new Discord.Collection();
 // Login to Discord with your client's token
 client.login(token).then(() => {
     client.user.setPresence({ activities: [{ name: 'sing of crows', type: 'LISTENING' }], status: 'online' });
@@ -19,9 +24,9 @@ client.login(token).then(() => {
 });
 
 // When the client is ready, run this code (only once)
-client.once('ready', () => {
-	console.log(`Welcome! You're now ${client.user.tag} On Fire 🔥!`);
-});
+// client.once('ready', () => {
+// 	console.log(`Welcome! You're now ${client.user.tag} On Fire 🔥!`);
+// });
 
 client.on('guildMemberAdd', (member) => {
     const channelId = 'CHANNEL_ID'; // The Channel ID you just copied
@@ -30,14 +35,6 @@ client.on('guildMemberAdd', (member) => {
         channel.send(welcomeMessage)
     });
 })
-
-client.on('guildMemberAdd', (member) => {
-    const channelId = 'CHANNEL_ID';
-    const welcomeMessage = `Hey <@${member.id}>! Welcome to my server! \cmds See commands list by typing: $listCommands`;
-    member.guild.channels.fetch(channelId).then(channel => {
-        channel.send(welcomeMessage)
-    });
-});
 
 client.on('messageCreate', (message) => {
 	// if (message.author.client) {
@@ -59,28 +56,10 @@ client.on('messageCreate', (message) => {
 		message.channel.send(socialsLinkedin);
 		message.channel.send(socialsTwitter);
     }
-
 	// Func gets random number using Math.floor/random
-	function getRandomNumber(min, max){
-		return Math.floor(Math.random() * (max-min) + min);
-	} 
-
-
-
-
-    // //Func gets Winner (maxvalue)
-    // function getPongWinner() {
-    //     // nameArr = new String [player.size()];
-
-    //     nameArr= players.keySet().toArray(nameArr);
-
-    //     let winner = players[0];
-
-    //     maxValue = player.get(nameArr[0]);
-    // }
-
-    /////
-
+	// async function getRandomNumber(min, max){
+	// 	return Math.floor(Math.random() * (max-min) + min);
+	// } 
 	if (message.content == '$listCommands') {
         const exampleEmbed = new MessageEmbed()
             .setColor('#ffd046')
@@ -101,60 +80,126 @@ client.on('messageCreate', (message) => {
     else if (message.content == '$dislike') {
         message.react('👎');
     }
-
 	//React emoji & Call "Dados Game" Function
     else if(message.content == '$dados'){
         message.react('✅');
         let randomNumber = getRandomNumber(0, 100);
         message.reply(`Your random number is ${randomNumber}.`)
     }
-
     //Ping Pong GAME
 
-    if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){
-        
-        let uscore = getRandomNumber(0, 100);
-        let botscore = getRandomNumber(0, 100);
+    ///////🎶 Music Player 🎶 ////////
 
-        function getPingWinner(){
-    
-            if( uscore < botscore ){
-    
-                message.reply( "So............." +
-                `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`);
-            }
-        
-            else if (uscore > botscore){
-                
-                message.reply("So............." +
-                `\n ${message.author}✅ you WIN  🌟  this time 🎉!`);
-            }
+    const player = new Player(client);
+    // mPlayer HandleErrors❌
+    player.on("error", (queue, error) => {
+        console.log(`[${queue.guild.name}] Error emitted from the queue: ${error.message}`);
+    });
+    player.on("connectionError", (queue, error) => {
+        console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`);
+    });
+
+    // mPlayer/queue status
+
+    player.on("songStart", (queue, track) => {
+        queue.metadata.send(`🎶 | Started playing: **${track.title}** in **${queue.connection.channel.name}**!`);
+    });
+
+    player.on("songAdd", (queue, track) => {
+        queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
+    });
+    player.on("botDisconnect", (queue) => {
+        queue.metadata.send("❌ | I was manually disconnected from the voice channel, clearing queue!");
+    });
+    player.on("channelEmpty", (queue) => {
+        queue.metadata.send("❌ | Nobody is in the voice channel, leaving...");
+    });
+    player.on("queueEnd", (queue) => {
+        queue.metadata.send("⚠️ | Queue finished!");
+    });
+
+    //Deploy music Player
+
+    client.on("messageCreate", async (message) => {
+		if (message.author.bot || !message.guild) return;
+    if (!client.application?.owner) await client.application?.fetch();
+
+    client.on("messageCreate", async (message) => {
+
+		if (message.content === "!deploy" && message.author.id === client.application?.owner?.id) {
+        await message.guild.commands.set([
+            {
+                name: "play",
+                description: "Plays a song from youtube",
+                options: [
+                    {
+                        name: "query",
+                        type: "STRING",
+                        description: "The song you want to play",
+                        required: true
+                    }
+                ]
+            },
+            {
+                name: "skip",
+                description: "Skip to the current song"
+            },
+            {
+                name: "queue",
+                description: "See the queue"
+            },
+            {
+                name: "stop",
+                description: "Stop the player 🛑"
+            },
+        ]);
+
+        await message.reply("Deployed!");
+    }
+});
+    });
+    client.on("interactionCreate", async (interaction) => {
+        if (!interaction.isCommand() || !interaction.guildId) return;
+
+        if (!(interaction.member instanceof GuildMember) || !interaction.member.voice.channel) {
+            return void interaction.reply({ content: "You are not in a voice channel!", ephemeral: true });
         }
 
-        message.reply(`  ${message.author} your score is ${uscore}  🔥`);
+        if (interaction.guild.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.me.voice.channelId) {
+            return void interaction.reply({ content: "You are not in my voice channel!", ephemeral: true });
+        }
+    });
 
-        const pongMessage = `Pong!`;
-        message.channel.send(pongMessage);
-        message.reply(`${client.user}'s score is ${botscore} 🔥`);
+    //MuicPlayer Commands
+    client.on("interactionCreate", async (interaction) => {
+    
+            if (interaction.commandName === "!play") {
+                // TODO: Implement play command
+                await interaction.deferReply();
 
-        console.log(getPingWinner());
+                const query = interaction.options.get("query");
+                const searchResult = await player.search(query,{
+                    requestedBy: interaction.user,
+                    searchEngine: QueryType.AUTO
+                })
+                .catch(()=>{});
+                if (!searchResult || !searchResult.tracks.length) 
+                return void interaction.followUp({ content: "No results were found !"});
+            }
+            if (interaction.commandName === "!play"){
+                const queue = await player.createQueue(interaction.guild, {
+                metadata: interaction.channel                    
+                });
 
-        //get maxValue & Winner
-        // const botWin = uscore < botscore;
-        // const userWin = uscore > botscore;
-        // const score = {
-        //     botWin : message.reply( "So............." +
-        //     `\n ${message.author}🅾️ you LOSE  😱  this time ❌!`), 
-
-        //     userWin : message.reply("So............." +
-        //     `\n ${message.author}✅ you WIN  🌟  this time 🎉!`)
-        // }
-
-        // const pingWinner = Math.max(score);
-        // get Winner if method
-
-        
-
-        // console.log(getMaxValue());
-    }
+                try {
+                    if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+                } catch {
+                    void player.deleteQueue(interaction.guildId);
+                    return void interaction.followUp({content:"Could not join to your voice channel!😵"})
+                }
+                await interaction.followUp({content:`⏳|Loading your ${searchResult.playlist ? "playlist" : "track"}...⏳` });
+                searchResult.playlist ? queue.addTracks(searchResult.tracks) : queue.addTrack(searchResult.tracks[0]);
+                if (!queue.playing) await queue.play();
+            }
+    });
 });
