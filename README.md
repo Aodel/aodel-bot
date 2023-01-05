@@ -4,6 +4,8 @@ Hello guys ! This is a project which i'm learning how to create a Discord-BOT an
 
 ## FIRST STEPS 📝
 
+**Firstly **have look** about the Discord API, so if do you want to create a DCbot you must: ![Create an account or loggin :](https://discord.com/developers/docs/intro)
+
 **Connect your DC-bot  🔌**
 
 You must fisrtly import the necessary packages. I use a _const_ to import it all <img src="https://www.freeiconspng.com/uploads/pokeball-icon-1.png" width="350" 
@@ -11,7 +13,7 @@ You must fisrtly import the necessary packages. I use a _const_ to import it all
  
  To initialize the BOT(client) you almost need to call the **_token_**
  
- **_VERY IMPORTANT_:**⚠️ You must _STORAGE_ your **own token** inside a const that must be ignored on your repository ( for example ignoring it by **.gitnignore**)⚠️
+ **_VERY IMPORTANT_:**⚠️ You must _STORAGE_ your **own token** inside a const that must be ignored on your repository ( for example ignoring it by **.gitignore**)⚠️
  
  **🚫NEVER pass directly your TOKEN!!!🚫**
 
