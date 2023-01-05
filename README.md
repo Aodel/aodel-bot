@@ -4,7 +4,7 @@ Hello guys ! This is a project which i'm learning how to create a Discord-BOT an
 
 ## FIRST STEPS 📝
 
-**Firstly **have look** about the Discord API, so if do you want to create a DCbot you must: ![Create an account or loggin (click here)](https://discord.com/developers/docs/intro)
+**Firstly **have look** about the Discord API, so if do you want to create a DCbot you must: [Create an account or loggin (click here)](https://discord.com/developers/](https://discord.com/developers/docs/intro)
 
 **Connect your DC-bot  🔌**
 
