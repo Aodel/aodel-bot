@@ -1,4 +1,4 @@
-// Require the necessary discord.js classes
+// Require the necessary 
 const Discord = require("discord.js");
 const {
   Client,
