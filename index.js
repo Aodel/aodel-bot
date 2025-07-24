@@ -1,4 +1,4 @@
-const keepAlive = require("./server")
+
 /*
 const Discord = require('discord.js');
 const { Client, GatewayIntentBits, MessageEmbed, DiscordAPIError } = require('discord.js');

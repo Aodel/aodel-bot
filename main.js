@@ -1,5 +1,3 @@
-//Const of server to keep uptime our Bot
-/*const keepAlive = require("./server");*/
 // Require the necessary discord.js classes
 const Discord = require("discord.js");
 const {
@@ -23,21 +21,21 @@ const client = new Client({
   ],
 });
 
-  /*keepAlive();*/
+/*keepAlive();*/
 
-  // Login to Discord with your client's token
-  client.login(token).then(() => {
-    client.user.setPresence({
-      activities: [{ name: "sing of crows", type: "LISTENING" }],
-      status: "online",
-    });
-    client.user.setStatus("dnd");
+// Login to Discord with your client's token
+client.login(token).then(() => {
+  client.user.setPresence({
+    activities: [{ name: "sing of crows", type: "LISTENING" }],
+    status: "online",
   });
+  client.user.setStatus("dnd");
+});
 
-  // When the client is ready, run this code (only once)
-  client.once("ready", () => {
-    console.log(`Welcome ${client.user.tag}! You're now  On Fire 🔥!`);
-  });
+// When the client is ready, run this code (only once)
+client.once("ready", () => {
+  console.log(`Welcome ${client.user.tag}! You're now  On Fire 🔥!`);
+});
 
 client.commands = new Discord.Collection();
 
@@ -81,6 +79,21 @@ client.on("messageCreate", (message) => {
   function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+  // Func gets a Winner for the ping pong game
+  function getPingWinner(uscore, botscore) {
+    try {
+      if (uscore < botscore) {
+        return `${message.author}🅾️ don't give UP! ❌!`;
+      } else if (uscore > botscore) {
+        return `${message.author}✅ you shine like a 🌟  this time 🎉!`;
+      } else {
+        return "It's a tie!";
+      }
+    } catch (error) {
+      console.log(error);
+      return "An error occurred while determining the winner.";
+    }
+  }
 
   if (message.content == "$listCommands") {
     const exampleEmbed = new MessageEmbed()
@@ -108,10 +121,22 @@ client.on("messageCreate", (message) => {
   }
 
   //Ping Pong GAME
+  else if (message.content == "$ping" || message.content == "$ping pong") {
+    message.reply(`Vamo a jugá, ehto er PinPon 🔥`);
 
-  ///////🎶 Music Player 🎶 ////////
+    // Generate random scores for user and bot
+    let uscore = getRandomNumber(0, 100);
+    let botscore = getRandomNumber(0, 100);
 
-  const player = new Player(client);
+    const pongMessage = `Pong!`;
+    message.channel.send(pongMessage);
+    let winnerPing = getPingWinner(uscore, botscore);
+    message.reply(`Bot score is ${botscore}  🔥`);
+    message.reply(`${message.author} your score is ${uscore}  🔥`);
+    message.reply(`And the winner is... ${winnerPing} 🎉`);
+  }
+
+   /* // mPlayer 
   // mPlayer HandleErrors❌
   player.on("error", (queue, error) => {
     console.log(
@@ -256,7 +281,5 @@ client.on("messageCreate", (message) => {
         : queue.addTrack(searchResult.tracks[0]);
       if (!queue.playing) await queue.play();
     }
-  });
-
-
+  });*/
 });
