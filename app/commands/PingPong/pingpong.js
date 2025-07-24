@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import "index.js";
 
 export default async (client, message) => {
     if(message.content.toLowerCase().includes('$ping') || message.content.toLowerCase().includes('$ping pong')){

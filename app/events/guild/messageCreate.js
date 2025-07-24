@@ -1,4 +1,4 @@
-
+import "index.js";
     client.on("messageCreate", async (message) => {
 		if (message.author.bot || !message.guild) return;
     if (!client.application?.owner) await client.application?.fetch();
